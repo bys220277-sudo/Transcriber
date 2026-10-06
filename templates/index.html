@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transcriber</title>
+    <link rel="icon" type="image/x-icon" href="/static/transcriber.ico">
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header>
+            <h1>🎙 Transcriber</h1>
+            <p class="subtitle">Локальная транскрипция аудио · faster-whisper</p>
+        </header>
+
+        <!-- Upload Zone -->
+        <section class="card upload-card">
+            <div id="dropzone" class="dropzone">
+                <div class="dz-icon">📁</div>
+                <p>Перетащите аудио сюда или <span class="link">выберите файл</span></p>
+                <small>MP3, WAV, M4A, OGG, FLAC, AAC, OPUS, WMA, а также видео MP4, MKV, MOV</small>
+                <input type="file" id="fileInput" accept=".mp3,.wav,.m4a,.ogg,.oga,.flac,.wma,.aac,.opus,.webm,.mp4,.mkv,.mov,.avi,.m4b,.aif,.aiff,.amr,.3gp" hidden>
+            </div>
+            <div id="fileInfo" class="file-info hidden">
+                <span class="file-icon">🎵</span>
+                <span id="fileName"></span>
+                <button id="removeFile" class="btn-icon" title="Убрать файл">✕</button>
+            </div>
+        </section>
+
+        <!-- Settings -->
+        <section class="card settings-card">
+            <div class="settings-row">
+                <div class="setting">
+                    <label for="modelSelect">Модель</label>
+                    <select id="modelSelect">
+                        <option value="large-v3" selected>Large-v3 · лучшая</option>
+                        <option value="medium">Medium · точная</option>
+                        <option value="small">Small · баланс</option>
+                        <option value="base">Base · быстрая</option>
+                        <option value="tiny">Tiny · быстрее всех</option>
+                    </select>
+                </div>
+                <div class="setting">
+                    <label for="qualitySelect">Точность</label>
+                    <select id="qualitySelect">
+                        <option value="fast">Быстро</option>
+                        <option value="normal" selected>Обычная</option>
+                        <option value="max">Максимальная (медленнее)</option>
+                    </select>
+                </div>
+                <div class="setting">
+                    <label for="langSelect">Язык</label>
+                    <select id="langSelect">
+                        <option value="ru" selected>Русский</option>
+                        <option value="en">English</option>
+                        <option value="uk">Українська</option>
+                        <option value="de">Deutsch</option>
+                        <option value="fr">Français</option>
+                        <option value="es">Español</option>
+                        <option value="auto">Автоопределение</option>
+                    </select>
+                </div>
+                <div class="setting toggle-setting">
+                    <label for="tsToggle">Таймкоды</label>
+                    <label class="switch">
+                        <input type="checkbox" id="tsToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- Models -->
+        <section class="card models-card">
+            <div class="models-header">
+                <h2>Загруженные модели</h2>
+                <div class="models-actions">
+                    <button id="btnOpenModels" class="btn btn-secondary btn-sm">📂 Открыть папку моделей</button>
+                    <button id="btnRefreshModels" class="btn-icon" title="Обновить список">⟳</button>
+                </div>
+            </div>
+            <div id="modelsList" class="models-list"></div>
+            <p class="models-hint">Все модели хранятся в папке <code>models</code>: встроенные скачиваются туда при первом использовании, сторонние — положите папку с файлом <code>model.bin</code> (из репозитория HuggingFace) — она появится в списке и в выборе модели.</p>
+        </section>
+
+        <!-- Controls -->
+        <section class="card controls-card">
+            <div class="controls-row">
+                <button id="btnStart" class="btn btn-primary" disabled>▶ Начать</button>
+                <button id="btnStop" class="btn btn-danger" disabled>⏹ Стоп</button>
+                <button id="btnCopy" class="btn btn-secondary" disabled>📋 Копировать</button>
+                <button id="btnSrt" class="btn btn-secondary" disabled>⬇ SRT</button>
+                <button id="btnTxt" class="btn btn-secondary" disabled>⬇ TXT</button>
+            </div>
+            <div id="progressWrap" class="progress-wrap hidden">
+                <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+                <span id="progressLabel" class="progress-label">0%</span>
+            </div>
+            <div id="statsLine" class="stats-line hidden"></div>
+            <div id="statusLine" class="status-line"></div>
+            <div id="noticeLine" class="notice-line hidden"></div>
+        </section>
+
+        <!-- Output -->
+        <section class="card output-card">
+            <div class="output-header">
+                <h2>Результат</h2>
+                <div class="output-actions">
+                    <span id="metaInfo" class="meta"></span>
+                    <button id="btnOpenResults" class="btn btn-secondary btn-sm" title="Каждый результат автоматически сохраняется в папку results">📂 Сохранённые</button>
+                </div>
+            </div>
+            <div id="output" class="output-area">
+                <span class="placeholder">Транскрипция появится здесь…</span>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <span id="deviceInfo">Проверяю GPU…</span>
+        </footer>
+    </div>
+
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

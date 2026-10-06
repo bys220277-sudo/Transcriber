@@ -1,0 +1,24 @@
+Третьи стороны, используемые в Transcriber
+==========================================
+
+Whisper (OpenAI) — MIT License
+  https://github.com/openai/whisper
+
+faster-whisper (SYSTRAN) — MIT License
+  https://github.com/SYSTRAN/faster-whisper
+
+CTranslate2 (OpenNMT) — MIT License
+  https://github.com/OpenNMT/CTranslate2
+
+Flask (Pallets Projects) — BSD 3-Clause License
+  https://github.com/pallets/flask
+
+Flask-SocketIO / python-socketio — MIT License
+  https://github.com/miguelgrinberg/flask-socketio
+
+socket.io JavaScript client — MIT License
+  https://github.com/socketio/socket.io
+
+NVIDIA cuBLAS (пакет nvidia-cublas-cu12, ставится при установке только на
+компьютерах с видеокартой NVIDIA) — распространяется NVIDIA по лицензионному
+соглашению конечного пользователя, загружается с PyPI.
